@@ -24,32 +24,30 @@ class App extends Component {
         maxOcc: snap.val(),
       });
     });
+
+    locationRef.on('value', snap => {
+      this.setState({
+        location: snap.val()
+      });
+    });
 }
 
- //  handleSubmit(e) {
- //    e.preventDefault();
- //
- //    var x = hello();
- //
- //    firebase.database().ref().child('Classroom').child('SN11').update({
- //      location: 'SN11',
- //      maxOcc: x + 1
- //    });
- //
- // }
+  handleSubmit = (e) => {
+    e.preventDefault();
+    firebase.database().ref().child('Classroom').child('SN11').update({
+      location: this.state.location,
+      maxOcc: this.state.maxOcc + 1
+    });
+
+ }
 
   render() {
     return (
       <div className="App">
-        <head>
-          <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
-        </head>
+
         <header className="App-header">
           <button onClick=
-            {this.setState({
-              location: this.state.location,
-              maxOcc: this.state.maxOcc + 1
-            })}
+            {this.handleSubmit}
             >Occupied/Leave</button>
           <p>
             {this.state.floor}
