@@ -2,19 +2,14 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import * as firebase from 'firebase';
-import writeUserData from './getInfo.js'
-
-// const ROOMS = [{name: 'SN11', maxOcc: 10, currOcc: 1}, {name:'SN12',  maxOcc: 10, currOcc: 1}]
-const ROOMS = ['SN11', 'SN12']
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      location: 'SN11',
+      location: 'SN12',
       currOcc: null,
-      maxOcc: null,
-      rooms: []
+      maxOcc: null
     };
   }
 
@@ -62,14 +57,6 @@ class App extends Component {
     }
   }
 
-  handleSelectRoom = e => {
-    e.preventDefault();
-    console.log(e.target)
-    const roomRef = firebase.database().ref().child('Classroom')
-    .child(e.target.room);
-
-  }
-
   render() {
     return (
       <div className="App">
@@ -83,7 +70,6 @@ class App extends Component {
           <button onClick=
             {this.handleSubmitSub}
             >Leave</button>
-
           <p>
             {this.state.currOcc}
           </p>
