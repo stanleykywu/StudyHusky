@@ -23,7 +23,6 @@ class App extends Component {
 
   populate = (e) => {
     // e.preventDefault();
-    console.log(this.state)
     const roomRef = firebase.database().ref().child('Classroom')
     .child(this.state.location);
     const currOccRef = roomRef.child('currOcc');
