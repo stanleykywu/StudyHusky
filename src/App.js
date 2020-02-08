@@ -16,7 +16,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn you rmoms
+          Learn more!
         </a>
       </header>
     </div>
