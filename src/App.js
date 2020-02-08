@@ -8,7 +8,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      location: null,
+      currOcc: 0,
       maxOcc: 0
     };
   }
@@ -16,7 +16,7 @@ class App extends Component {
   //this is called after inital DOM
   componentWillMount() {
     const roomRef = firebase.database().ref().child('Classroom').child('SN11');
-    const locationRef = roomRef.child('location');
+    const currRef = roomRef.child('currOcc');
     const maxOccRef = roomRef.child('maxOcc');
 
     maxOccRef.on('value', snap => {
@@ -25,21 +25,28 @@ class App extends Component {
       });
     });
 
-    locationRef.on('value', snap => {
+    currRef.on('value', snap => {
       this.setState({
-        location: snap.val()
+        currOcc: snap.val()
       });
     });
 }
 
-  handleSubmit = (e) => {
+  handleSubmitAdd = (e) => {
     e.preventDefault();
     firebase.database().ref().child('Classroom').child('SN11').update({
       location: this.state.location,
-      maxOcc: this.state.maxOcc + 1
+      maxOcc: this.state.curOcc + 1
     });
-
  }
+
+ handleSubmitSub = (e) => {
+   e.preventDefault();
+   firebase.database().ref().child('Classroom').child('SN11').update({
+     location: this.state.location,
+     maxOcc: this.state.curOcc - 1
+   });
+}
 
   render() {
     return (
@@ -47,13 +54,16 @@ class App extends Component {
 
         <header className="App-header">
           <button onClick=
-            {this.handleSubmit}
-            >Occupied/Leave</button>
+            {this.handleSubmitAdd}
+            >Occupy</button>
+            <button onClick=
+              {this.handleSubmitSub}
+              >Leave</button>
           <p>
-            {this.state.floor}
+            {this.state.currOcc}
           </p>
           <p>
-            {this.state.occupied}
+            {this.state.maxOcc}
           </p>
         </header>
       </div>
