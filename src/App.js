@@ -1,36 +1,56 @@
-import React, { Component } from 'react';
-import axios from "axios";
+import React, {Component} from 'react';
+import logo from './logo.svg';
 import './App.css';
-
-
-import UserForm from "./UserForm";
+import * as firebase from 'firebase';
 
 class App extends Component {
-  state = {
-    repos: null
+  constructor(props) {
+    super(props);
+    this.state = {
+      floor: null
+    };
   }
-  getUser = (e) => {
+
+  //this is called after inital DOM
+  componentWillMount() {
+    const floorRef = firebase.database().ref().child('Classroom').child('SN11').child('floor');
+    floorRef.on('value', snap => {
+      this.setState({
+        floor: snap.val(),
+      });
+    });
+  }
+
+  handleSubmit(e) {
     e.preventDefault();
-    const user = e.target.elements.username.value;
-    if (user) {
-      axios.get(`https://api.github.com/users/${user}`)
-      .then((res) => {
-        const repos = res.data.public_repos;
-        this.setState({ repos });
-      })
-    } else return;
-  }
+
+    firebase.database().ref().child('Classroom').child('SN11').update({
+      occupied: 'vv',
+      section: 'A14',
+      floor: 1
+    });
+
+ }
+
   render() {
     return (
       <div className="App">
+        <head>
+          <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+        </head>
         <header className="App-header">
-          <h1 className="App-title">HTTP Calls in React</h1>
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>
+            Edit <code>src/App.js</code> and save to reload.
+          </p>
+          <button onClick={this.handleSubmit} >Occupied/Leave</button>
+          <p>
+            {this.state.floor}
+          </p>
         </header>
-        <UserForm getUser={this.getUser} />
-        { this.state.repos ? <p>Number of repos: { this.state.repos }</p> : <p>Please enter a username.</p> }
       </div>
     );
   }
-};
+}
 
 export default App;
