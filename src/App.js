@@ -2,20 +2,28 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import * as firebase from 'firebase';
+import {ContainerComponent, DropdownComponent2} from './Components/ContainerComponent';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      location: 'SN12',
+      location: 'SN null',
       currOcc: null,
       maxOcc: null
     };
+    this.handleLocationChange = this.handleLocationChange.bind(this);
+  }
+
+  handleLocationChange(locVal) {
+    this.setState({location : locVal} , () => {
+      console.log(this.state.location);
+    })
   }
 
   populate = (e) => {
-    e.preventDefault();
-
+    // e.preventDefault();
+    console.log(this.state)
     const roomRef = firebase.database().ref().child('Classroom')
     .child(this.state.location);
     const currOccRef = roomRef.child('currOcc');
@@ -23,7 +31,7 @@ class App extends Component {
     maxOccRef.on('value', snap => {
       this.setState({
         maxOcc: snap.val()
-      });
+      }, () => {console.log("please work", snap.val())})
     });
 
     currOccRef.on('value', snap => {
@@ -60,23 +68,26 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <button onClick=
-            {this.populate}
-            >Populate</button>
-          <button onClick=
-            {this.handleSubmitAdd}
-            >Occupy</button>
-          <button onClick=
-            {this.handleSubmitSub}
-            >Leave</button>
-          <p>
-            {this.state.currOcc}
-          </p>
-          <p>
-            {this.state.maxOcc}
-          </p>
-        </header>
+        {/*}<header className="App-header">
+        <button onClick=
+        {this.populate}
+        >Populate</button>
+        <button onClick=
+        {this.handleSubmitAdd}
+        >Occupy</button>
+        <button onClick=
+        {this.handleSubmitSub}
+        >Leave</button>
+        <p>
+        {this.state.currOcc}
+        </p>
+        <p>
+        {this.state.maxOcc}
+        </p>
+        </header>*/}
+        <ContainerComponent onLocChange = {this.handleLocationChange}
+          populate = {this.populate} submitAdd = {this.handleSubmitAdd}
+          />
       </div>
     );
   }
